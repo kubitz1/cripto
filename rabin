@@ -1,0 +1,47 @@
+import random
+from sympy import isprime, mod_inverse
+
+def random_prime(bits):
+    while True:
+        num = random.getrandbits(bits)
+        if isprime(num):
+            return num
+def generate_rabin_keys(bits=8):
+    p = random_prime(bits)
+    q = random_prime(bits)
+    n = p * q
+    return (n, p, q)
+
+
+
+def rabin_encrypt(message, n):
+    return pow(message, 2, n)
+
+
+
+def mod_sqrt(c, p):
+   
+    return pow(c, (p + 1) // 4, p)
+
+
+def rabin_decrypt(c, p, q):
+    n = p * q
+
+    m1 = mod_sqrt(c, p)
+    m2 = mod_sqrt(c, q)
+
+  
+    return m1  
+
+
+
+n, p, q = generate_rabin_keys(bits=8)
+message = 14 
+print(f"Message: {message}")
+
+# Cifram și descifram mesajul
+ciphertext = rabin_encrypt(message, n)
+decrypted_message = rabin_decrypt(ciphertext, p, q)
+
+print(f"Encrypted: {ciphertext}")
+print(f"Decrypted: {decrypted_message}")
