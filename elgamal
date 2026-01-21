@@ -1,0 +1,32 @@
+import random
+from sympy import mod_inverse
+def generate_elgamal_keys(q=23, a=14):
+    x = random.randint(1, q-1)  # Cheia privată
+    y = pow(a, x, q)  # Cheia publică
+    return (q, a, y), (x, q)
+
+def elgamal_encrypt(message, public_key):
+    q, a, y = public_key
+    k = random.randint(1, q-1)  # Alegem k aleator
+    C1 = pow(a, k, q)  # C1 = a^k mod q
+    C2 = (pow(y, k, q) * message) % q  # C2 = y^k * m mod q
+    return C1, C2
+
+def elgamal_decrypt(ciphertext, private_key):
+    C1, C2 = ciphertext
+    x, q = private_key
+    r = pow(C1, x, q)  # r = C1^x mod q
+    r_inv = mod_inverse(r, q)  # Inversul lui r modulo q
+    message = (C2 * r_inv) % q  # m = (C2 * r^-1) mod q
+    return message
+
+
+public_key, private_key = generate_elgamal_keys()
+message = 17  
+print(f"Message: {message}")
+
+ciphertext = elgamal_encrypt(message, public_key)
+decrypted_message = elgamal_decrypt(ciphertext, private_key)
+
+print(f"Encrypted: {ciphertext}")
+print(f"Decrypted: {decrypted_message}")
