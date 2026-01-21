@@ -1,0 +1,28 @@
+import random
+
+# Funcție de calcul a exponențierii (pentru operatiile de ridicare la putere modulo q)
+def mod_exp(base, exp, mod):
+    return pow(base, exp, mod)
+
+# Generarea cheilor Diffie-Hellman
+def generate_diffie_hellman_keys(q, a):
+    x = random.randint(1, q - 1)  # Cheia privată
+    y = mod_exp(a, x, q)  # Cheia publică
+    return x, y  # Returnăm cheia privată și cheia publică
+
+# Funcție pentru calculul cheii comune
+def calculate_shared_key(private_key, public_key, q):
+    return mod_exp(public_key, private_key, q)
+
+# Test Diffie-Hellman
+q = 353  # Număr prim
+a = 3    # Generator primitiv (exemplu)
+
+# Generăm cheile pentru utilizator
+private_key, public_key = generate_diffie_hellman_keys(q, a)
+print(f"Private key: {private_key}, Public key: {public_key}")
+
+# Calculăm cheia secretă
+shared_key = calculate_shared_key(private_key, public_key, q)
+
+print(f"Shared key: {shared_key}")
