@@ -1,0 +1,13 @@
+import hashlib
+
+# Funcție pentru calculul hash-ului (SHA-256)
+def compute_hash(message):
+    hash_object = hashlib.sha256()
+    hash_object.update(message.encode())  # Mesajul trebuie să fie în format de bytes
+    return hash_object.hexdigest()  # Returnează rezultatul în format hexazecimal
+
+# Test funcție hash
+message = "Hello, world!"
+hashed_message = compute_hash(message)
+print(f"Message: {message}")
+print(f"SHA-256 Hash: {hashed_message}")
