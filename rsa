@@ -1,0 +1,49 @@
+import random
+from sympy import isprime, mod_inverse
+
+# Funcție pentru a genera un număr prim aleatoriu
+def random_prime(bits):
+    while True:
+        num = random.getrandbits(bits)
+        if isprime(num):
+            return num
+
+# Generarea cheilor RSA
+def generate_rsa_keys(bits=8):
+    # Alegerea numerelor prime p și q
+    p = random_prime(bits)
+    q = random_prime(bits)
+    n = p * q
+    phi = (p - 1) * (q - 1)
+
+    # Alegerea unui exponent e, coprim cu φ(n)
+    e = 65537  # Cel mai folosit exponent
+    d = mod_inverse(e, phi)
+
+    # Cheia publică și cheia privată
+    public_key = (e, n)
+    private_key = (d, n)
+
+    return public_key, private_key
+
+# Funcție de criptare RSA
+def rsa_encrypt(message, public_key):
+    e, n = public_key
+    return pow(message, e, n)
+
+# Funcție de decriptare RSA
+def rsa_decrypt(ciphertext, private_key):
+    d, n = private_key
+    return pow(ciphertext, d, n)
+
+# Test RSA
+public_key, private_key = generate_rsa_keys(bits=8)  
+message = 42  # Mesajul de criptat
+print(f"Message: {message}")
+
+# Cifram și descifram mesajul
+ciphertext = rsa_encrypt(message, public_key)
+decrypted_message = rsa_decrypt(ciphertext, private_key)
+
+print(f"Encrypted: {ciphertext}")
+print(f"Decrypted: {decrypted_message}")
