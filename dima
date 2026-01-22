@@ -1,0 +1,53 @@
+import random
+
+# ==========================================
+# 1. Configurare Publică (Știută de toți)
+# ==========================================
+P = 23   # Număr prim (mic, pentru exemplu)
+G = 5    # Baza
+
+print(f"--- 1. Configurare: P={P}, G={G} ---\n")
+
+# ==========================================
+# 2. Generarea Cheilor (Fiecare la el acasă)
+# ==========================================
+
+# SERVERUL (Bob)
+# Alege un număr secret
+server_private = random.randint(1, P-1)
+# Calculează cheia publică: (G ^ private) % P
+server_public = (G ** server_private) % P
+print(f"[Server] Cheie Privată: {server_private} | Publică: {server_public}")
+
+# CLIENTUL (Alice)
+# Alege un număr secret
+client_private = random.randint(1, P-1)
+# Calculează cheia publică
+client_public = (G ** client_private) % P
+print(f"[Client] Cheie Privată: {client_private} | Publică: {client_public}")
+
+print("\n--- Cei doi fac schimb de Chei Publice ---\n")
+
+# ==========================================
+# 3. Calcularea Secretului (Autentificarea)
+# ==========================================
+
+# SERVERUL calculează Secretul folosind cheia publică a Clientului
+# Formula: (Cheie_Client ^ Cheie_Mea_Privată) % P
+secret_server = (client_public ** server_private) % P
+
+# CLIENTUL calculează Secretul folosind cheia publică a Serverului
+# Formula: (Cheie_Server ^ Cheie_Mea_Privată) % P
+secret_client = (server_public ** client_private) % P
+
+print(f"[Server] A calculat secretul comun: {secret_server}")
+print(f"[Client] A calculat secretul comun: {secret_client}")
+
+# ==========================================
+# 4. Verificare Finală
+# ==========================================
+if secret_server == secret_client:
+    print("\n✅ AUTENTIFICARE REUȘITĂ!")
+    print("Ambii utilizatori au ajuns la același secret matematic.")
+else:
+    print("\n❌ EROARE! Cineva a trișat.")
